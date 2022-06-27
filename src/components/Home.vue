@@ -1,3 +1,4 @@
+/* eslint-disable vue/no-parsing-error */
 <template>
   <el-container class="home-container">
     <!-- 头部导航 -->
@@ -15,7 +16,7 @@
         <!-- 侧边栏菜单区域 -->
         <div class="toggle-button" @click="toggleCollapse">|||</div>
         <el-menu
-          default-active="2"
+          :default-active="activePath"
           background-color="#545c64"
           text-color="#fff"
           active-text-color="#409BFF"
@@ -42,6 +43,7 @@
               :index="'/' + subItem.path"
               v-for="subItem in item.children"
               :key="subItem.id"
+              @click="saveNavstate('/' + subItem.path)"
             >
               <template slot="title">
                 <!-- 图标 -->
@@ -75,10 +77,13 @@ export default {
         145: 'iconfont icon-baobiao',
       },
       isCollapse: false,
+      // 被激活的链接地址
+      activePath: '',
     };
   },
   created() {
     this.getMenuList();
+    this.activePath = window.sessionStorage.getItem('activePath');
   },
   methods: {
     logout() {
@@ -90,10 +95,14 @@ export default {
       const { data: res } = await this.$http.get('menus');
       if (res.meta.status != 200) return this.$message.error(res.meta.msg);
       this.menulist = res.data;
-      console.log(res);
+      // console.log(res);
     },
     toggleCollapse() {
       this.isCollapse = !this.isCollapse;
+    },
+    // 保存链接的激活状态
+    saveNavstate(activePath) {
+      window.sessionStorage.setItem('activePath', activePath);
     },
   },
 };

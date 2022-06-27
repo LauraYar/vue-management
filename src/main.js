@@ -19,6 +19,18 @@ import {
   Submenu,
   MenuItem,
   MenuItemGroup,
+  Breadcrumb,
+  BreadcrumbItem,
+  Card,
+  Row,
+  Col,
+  Table,
+  TableColumn,
+  Switch,
+  Tooltip,
+  Pagination,
+  Dialog,
+  MessageBox,
 } from 'element-ui';
 import axios from 'axios';
 // 配置请求的根路径
@@ -42,8 +54,22 @@ Vue.use(Menu);
 Vue.use(Submenu);
 Vue.use(MenuItem);
 Vue.use(MenuItemGroup);
+Vue.use(Breadcrumb);
+Vue.use(BreadcrumbItem);
+Vue.use(Card);
+Vue.use(Row);
+Vue.use(Col);
+Vue.use(Table);
+Vue.use(TableColumn);
+Vue.use(Switch);
+Vue.use(Tooltip);
+Vue.use(Pagination);
+Vue.use(Dialog);
+
 // Vue.use(Message);message需要进行全局挂载，跟其他不一样
 Vue.prototype.$message = Message;
+// 没有加.confirm就没有取消按钮
+Vue.prototype.$confirm = MessageBox.confirm;
 Vue.config.productionTip = false;
 
 new Vue({
