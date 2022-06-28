@@ -12,7 +12,7 @@ module.exports = {
     parser: '@babel/eslint-parser',
   },
   rules: {
-    'prettier/prettier': ['error', { singleQuote: true }],
+    'prettier/prettier': ['error', { singleQuote: true, endOfLine: 'auto' }],
     'vue/multi-word-component-names': 0,
   },
   overrides: [
