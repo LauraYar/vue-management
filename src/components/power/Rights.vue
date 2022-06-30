@@ -57,14 +57,4 @@ export default {
 };
 </script>
 
-<style lang="less" scoped>
-.el-tag {
-  margin: 8px;
-}
-.bdtop {
-  border-top: 1px solid #eee;
-}
-.bdbottom {
-  border-bottom: 1px solid #eee;
-}
-</style>
+<style lang="less" scoped></style>

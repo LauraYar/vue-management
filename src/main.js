@@ -32,6 +32,9 @@ import {
   Dialog,
   MessageBox,
   Tag,
+  Tree,
+  Select,
+  Option,
 } from 'element-ui';
 import axios from 'axios';
 // 配置请求的根路径
@@ -67,6 +70,9 @@ Vue.use(Tooltip);
 Vue.use(Pagination);
 Vue.use(Dialog);
 Vue.use(Tag);
+Vue.use(Tree);
+Vue.use(Select);
+Vue.use(Option);
 
 // Vue.use(Message);message需要进行全局挂载，跟其他不一样
 Vue.prototype.$message = Message;
