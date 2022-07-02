@@ -5,6 +5,7 @@ import store from './store';
 import './assets/css/common.css';
 import './assets/fonts/iconfont.css';
 import 'element-ui/lib/theme-chalk/index.css';
+import TreeTable from 'vue-table-with-tree-grid';
 import {
   Button,
   Form,
@@ -35,6 +36,7 @@ import {
   Tree,
   Select,
   Option,
+  Cascader,
 } from 'element-ui';
 import axios from 'axios';
 // 配置请求的根路径
@@ -73,11 +75,13 @@ Vue.use(Tag);
 Vue.use(Tree);
 Vue.use(Select);
 Vue.use(Option);
+Vue.use(Cascader);
 
 // Vue.use(Message);message需要进行全局挂载，跟其他不一样
 Vue.prototype.$message = Message;
 // 没有加.confirm就没有取消按钮
 Vue.prototype.$confirm = MessageBox.confirm;
+Vue.component('tree-table', TreeTable);
 Vue.config.productionTip = false;
 
 new Vue({
