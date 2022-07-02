@@ -216,7 +216,7 @@ export default {
       queryInfo: {
         query: '',
         pagenum: 1,
-        pagesize: 3,
+        pagesize: 10,
       },
       userList: [],
       total: 0,
@@ -290,7 +290,7 @@ export default {
         return this.$message.error('获取用户列表失败');
       this.userList = res.data.users;
       this.total = res.data.total;
-      // console.log(res);
+      console.log(res);
     },
     // 监听pagesize改变的事件
     handleSizeChange(newSize) {
@@ -417,6 +417,7 @@ export default {
         `users/${this.userinfo.id}/role`,
         { rid: this.selectedRoleId }
       );
+      console.log(res);
       if (res.meta.status !== 200) {
         return this.$message.error('更新角色失败！');
       }
