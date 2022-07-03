@@ -95,7 +95,6 @@
             :props="cascaderProps"
             @change="parentCateChanged"
             clearable
-            change-on-select
           ></el-cascader>
         </el-form-item>
       </el-form>
@@ -242,7 +241,20 @@ export default {
     },
     // 点击对话框确定按钮，添加新的分类
     addCate() {
-      console.log(this.addCateForm);
+      this.$refs.addCateFormRef.validate(async (valid) => {
+        if (!valid) return;
+        const { data: res } = await this.$http.post(
+          'categories',
+          this.addCateForm
+        );
+        if (res.meta.status != 201) {
+          return this.$message.error('添加分类失败');
+        }
+        this.$message.success('添加成功');
+        this.getCateList();
+        this.addCateDialogVisible = false;
+        console.log(this.addCateForm);
+      });
     },
     // 监听对话框的关闭事件，清空重置表单数据
     addCateDialogClosed() {
