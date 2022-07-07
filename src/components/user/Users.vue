@@ -37,6 +37,7 @@
         <el-table-column label="邮箱" prop="email"></el-table-column>
         <el-table-column label="电话" prop="mobile"></el-table-column>
         <el-table-column label="角色" prop="role_name"></el-table-column>
+        <!-- <el-table-column label="状态status" prop="mg_state"></el-table-column> -->
         <el-table-column label="状态" prop="mg_state">
           <template slot-scope="scope">
             <!-- {{ scope.row }} -->
@@ -90,7 +91,7 @@
         :page-sizes="[3, 5, 10, 12, 15]"
         :page-size="queryInfo.pagesize"
         layout="total, sizes, prev, pager, next, jumper"
-        :total="400"
+        :total="total"
       >
       </el-pagination>
     </el-card>
@@ -161,7 +162,7 @@
       title="分配角色"
       :visible.sync="setRoleDialogVisible"
       width="50%"
-      @close="setRoleDialogClosed"
+      @closed="setRoleDialogClosed"
     >
       <div>
         <p>当前的用户：{{ userinfo.username }}</p>
@@ -171,7 +172,7 @@
           <el-select v-model="selectedRoleId" placeholder="请选择">
             <!-- 通过for循环生成每一个选项 -->
             <el-option
-              v-for="item in rolesList"
+              v-for="item in roleList"
               :key="item.id"
               :label="item.roleName"
               :value="item.id"
@@ -273,7 +274,7 @@ export default {
       // 需要被分配角色的用户信息
       userinfo: {},
       // 放置所有角色的数据列表
-      rolesList: [],
+      roleList: [],
       // 已选中的角色Id值
       selectedRoleId: '',
     };
@@ -282,6 +283,7 @@ export default {
     this.getUserList();
   },
   methods: {
+    // 1、3、1用户列表
     async getUserList() {
       const { data: res } = await this.$http.get('users', {
         params: this.queryInfo,
@@ -296,7 +298,7 @@ export default {
     handleSizeChange(newSize) {
       // console.log(newSize);
       this.queryInfo.pagesize = newSize;
-      this.getUserList();
+      // this.getUserList();
     },
     //监听页码值的改变
     handleCurrentChange(newPage) {
@@ -304,7 +306,7 @@ export default {
       this.queryInfo.pagenum = newPage;
       this.getUserList();
     },
-    // 监听switch开关状态的改变
+    // 监听switch开关状态的改变1.3.3修改用户状态
     async userStateChanged(userinfo) {
       console.log(userinfo);
       const { data: res } = await this.$http.put(
@@ -319,7 +321,7 @@ export default {
     addDialogClosed() {
       this.$refs.addFormRef.resetFields();
     },
-    // 点击确定按钮，添加新用户
+    // 点击确定按钮，添加新用户1.3.2
     addUser() {
       this.$refs.addFormRef.validate(async (valid) => {
         // console.log(valid);
@@ -336,19 +338,20 @@ export default {
         this.getUserList();
       });
     },
-    // 点击修改按钮弹出编辑用户信息的对话框
+    // 点击修改按钮弹出编辑用户信息的对话框1.3.4
     async showEditDialog(id) {
       const { data: res } = await this.$http.get('users/' + id);
       if (res.meta.status !== 200) {
         return this.$message.error('查询用户信息失败');
       }
+      // console.log(res.data);
       this.editForm = res.data;
       this.editDialogVisible = true;
     },
     editDialogClosed() {
       this.$refs.editFormRef.resetFields();
     },
-    // 修改用户信息并提交
+    // 修改用户信息并提交1.3.5
     editUserInfo() {
       this.$refs.editFormRef.validate(async (valid) => {
         if (!valid) return;
@@ -368,7 +371,7 @@ export default {
         this.$message.success('更新用户信息成功');
       });
     },
-    // 根据id删除对应的用户信息
+    // 根据id删除对应的用户信息1.3.6
     async removeUserById(id) {
       // 弹框询问用户是否删除数据
       const confirmResult = await this.$confirm(
@@ -385,7 +388,7 @@ export default {
       });
       // 如果用户确认删除，则返回字符串confirm
       // 如果用户取消删除，则返回字符串cancel
-      // console.log(confirmResult);
+      console.log(confirmResult);
       if (confirmResult !== 'confirm') return this.$message.info('已取消删除');
       // console.log('确认了删除');
       const { data: res } = await this.$http.delete('users/' + id);
@@ -398,26 +401,29 @@ export default {
     // 展示分配角色的对话框
     async setRole(userinfo) {
       this.userinfo = userinfo;
+      console.log(this.userinfo);
       // 展示对话框之前获取所有1.5.1角色列表
       const { data: res } = await this.$http.get('roles');
       if (res.meta.status !== 200) {
         return this.$message.error('获取角色列表失败');
       }
       this.$message.success('获取角色列表成功');
-      this.rolesList = res.data;
+      this.roleList = res.data;
+      // console.log(this.roleList);
       this.setRoleDialogVisible = true;
     },
-    // 点击按钮分配角色
+    // 点击确定按钮分配角色
     async saveRoleInfo() {
       // !this.selectedRoleId=true,则代表没有选则新的角色
       if (!this.selectedRoleId)
         return this.$message.error('请选择要分配的角色');
+      console.log(this.selectedRoleId);
       // 否则就代表已选择新角色，需要发起数据请求1.3.7把数据保存
       const { data: res } = await this.$http.put(
         `users/${this.userinfo.id}/role`,
         { rid: this.selectedRoleId }
       );
-      console.log(res);
+      // console.log(res);
       if (res.meta.status !== 200) {
         return this.$message.error('更新角色失败！');
       }

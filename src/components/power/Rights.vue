@@ -44,14 +44,14 @@ export default {
   methods: {
     // 定义getRightsList()方法获取权限列表
     async getRightsList() {
-      // 从接口文档粘贴请求路径rights/:type，此次请求的是列表类型权限数据
+      // 从接口文档粘贴请求路径rights/:type，此次请求的是列表类型权限数据1.4.1
       const { data: res } = await this.$http.get('rights/list');
       if (res.meta.status !== 200)
         return this.$message.error('获取权限列表失败');
       this.$message.success('获取权限列表成功');
       // 把获取到的数据挂载到rightsList中，供页面使用
       this.rightsList = res.data;
-      console.log(this.rightsList);
+      // console.log(this.rightsList);
     },
   },
 };

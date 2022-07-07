@@ -118,27 +118,26 @@
             <!-- >展开行 -->
             <el-table-column type="expand">
               <template slot-scope="scope">
-                <!-- !!!!!循环渲染Tag标签 -->
+                <!-- 循环渲染Tag标签 -->
                 <el-tag
                   v-for="(item, i) in scope.row.attr_vals"
                   :key="i"
                   closable
-                  @click="handleTagClose(i)"
-                >
+                  @close="handleClose(i, scope.row)"
                   >{{ item }}</el-tag
                 >
-                <!-- TAG标签输入的文本框 -->
+                <!-- 输入的文本框 -->
                 <el-input
                   class="input-new-tag"
                   v-if="scope.row.inputVisible"
                   v-model="scope.row.inputValue"
-                  ref="saveTagInputRef"
+                  ref="saveTagInput"
                   size="small"
                   @keyup.enter.native="handleInputConfirm(scope.row)"
                   @blur="handleInputConfirm(scope.row)"
                 >
                 </el-input>
-                <!-- TAG标签按钮 -->
+                <!-- 添加按钮 -->
                 <el-button
                   v-else
                   class="button-new-tag"
@@ -329,7 +328,7 @@ export default {
       // 渲染tag标签
       res.data.forEach((item) => {
         item.attr_vals = item.attr_vals
-          ? (item.attr_vals = item.attr_vals.split(','))
+          ? (item.attr_vals = item.attr_vals.split(' '))
           : [];
         // console.log(item.attr_vals);
         // 控制文本框的显示与隐藏
@@ -432,22 +431,23 @@ export default {
     },
 
     // 文本框失去焦点或摁下Enter键都会触发????????
+    // 文本框失去焦点，或摁下了 Enter 都会触发
     async handleInputConfirm(row) {
-      // 文本框优化：如果在文本框中敲入空格，先清空字符串两端空格row.inputVaule.trim()，再判断length是否为0（长度为0证明输入的是空内容）
-      // console.log(row);
-
-      if (row.inputValue.length === 0) {
-        // if (row.inputVaule.trim().length === 0) {
-        row.inputVaule = '';
+      if (row.inputValue.trim().length === 0) {
+        row.inputValue = '';
         row.inputVisible = false;
         return;
       }
-      // 如果没有return则证明输入的内容不为空，需要把输入的内容push到该行数据的attr—vals中（所有的tag标签内容源自attr—vals）
-      row.attr_vals.push(row.inputVaule);
-      console.log(row.inputVaule);
+      // 如果没有return，则证明输入的内容，需要做后续处理
+      row.attr_vals.push(row.inputValue.trim());
+      row.inputValue = '';
       row.inputVisible = false;
-      row.inputVaule = '';
-      // 需要发起请求保存这次数据(1.7.5)把添加的tag保存到后台
+      // 需要发起请求，保存这次操作
+      this.saveAttrVals(row);
+    },
+    // 将对 attr_vals 的操作，保存到数据库
+    async saveAttrVals(row) {
+      // 需要发起请求，保存这次操作
       const { data: res } = await this.$http.put(
         `categories/${this.cateId}/attributes/${row.attr_id}`,
         {
@@ -456,21 +456,27 @@ export default {
           attr_vals: row.attr_vals.join(' '),
         }
       );
-      if (res.meta.status !== 200) {
-        return this.$message.error('添加tag参数失败');
-      }
-      // console.log(res.data);
-      this.$message.success('添加tag参数成功');
-    },
-    // ???????
 
-    // 点击按钮展示文本输入框
+      if (res.meta.status !== 200) {
+        return this.$message.error('修改参数项失败！');
+      }
+
+      this.$message.success('修改参数项成功！');
+    },
+
+    // 点击按钮，展示文本输入框
     showInput(row) {
       row.inputVisible = true;
-      // 让文本框自动获得焦点，$nextTick方法的作用，就是当页面上元素被重新渲染之后才会指定回调函数中的代码
+      // 让文本框自动获得焦点
+      // $nextTick 方法的作用，就是当页面上元素被重新渲染之后，才会指定回调函数中的代码
       this.$nextTick(() => {
         this.$refs.saveTagInputRef.$refs.input.focus();
       });
+    },
+    // 删除对应的参数可选项
+    handleClose(i, row) {
+      row.attr_vals.splice(i, 1);
+      this.saveAttrVals(row);
     },
   },
   // 计算属性

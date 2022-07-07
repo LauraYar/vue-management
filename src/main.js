@@ -40,12 +40,17 @@ import {
   Alert,
   Tabs,
   TabPane,
+  Steps,
+  Step,
+  CheckboxGroup,
+  Checkbox,
 } from 'element-ui';
 import axios from 'axios';
+// import vueConfig from 'vue.config';
 // 配置请求的根路径
 axios.defaults.baseURL = 'https://lianghj.top:8888/api/private/v1';
 axios.interceptors.request.use((config) => {
-  console.log(config);
+  // console.log(config);
   config.headers.Authorization = window.sessionStorage.getItem('token');
   return config;
 });
@@ -82,6 +87,10 @@ Vue.use(Cascader);
 Vue.use(Alert);
 Vue.use(Tabs);
 Vue.use(TabPane);
+Vue.use(Steps);
+Vue.use(Step);
+Vue.use(CheckboxGroup);
+Vue.use(Checkbox);
 
 // Vue.use(Message);message需要进行全局挂载，跟其他不一样
 Vue.prototype.$message = Message;
@@ -89,6 +98,22 @@ Vue.prototype.$message = Message;
 Vue.prototype.$confirm = MessageBox.confirm;
 Vue.component('tree-table', TreeTable);
 Vue.config.productionTip = false;
+// 创建全局的过滤器（‘过滤器名称’，过滤器处理函数（形参originVal即需要处理的数据））
+Vue.filter('dateFormat', function (originVal) {
+  // 根据给定时间得到一个日期对象
+  const dt = new Date(originVal);
+  // 年、月、日
+  const y = dt.getFullYear();
+  // month从0开始
+  const m = (dt.getMonth() + 1 + '').padStart(2, '0');
+  const d = (dt.getDate() + '').padStart(2, '0');
+
+  const hh = (dt.getHours() + '').padStart(2, '0');
+  const mm = (dt.getMinutes() + '').padStart(2, '0');
+  const ss = (dt.getSeconds() + '').padStart(2, '0');
+
+  return `${y}-${m}-${d} ${hh}:${mm}:${ss}`;
+});
 
 new Vue({
   router,

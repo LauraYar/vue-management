@@ -71,13 +71,13 @@ export default {
       this.$refs.loginFormRef.validate(async (valid) => {
         // console.log(valid);
         if (!valid) return;
-        // 解构赋值
-        console.log(this);
+        // 解构赋值1.2.1登录接口
+
         const { data: res } = await this.$http.post('login', this.loginForm);
-        // console.log(res);
         if (res.meta.status !== 200) return this.$message.error('登录失败哦');
         this.$message.success('登录成功');
-        console.log(res);
+        // console.log(res);
+        // console.log(res.data);
         window.sessionStorage.setItem('token', res.data.token);
         this.$router.push('/home');
       });
