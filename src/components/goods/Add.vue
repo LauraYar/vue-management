@@ -63,7 +63,6 @@
             </el-form-item>
             <el-form-item label="商品分类" prop="goods_cat">
               <el-cascader
-                expand-trigger="hover"
                 :options="catelist"
                 :props="cateProps"
                 v-model="addForm.goods_cat"
@@ -201,9 +200,9 @@ export default {
       if (res.meta.status !== 200) {
         return this.$message.error('获取商品分类数据失败！');
       }
-
+      console.log(res.data);
       this.catelist = res.data;
-      console.log(this.catelist);
+      // console.log(this.catelist);
     },
     // 级联选择器选中项变化，会触发这个函数
     handleChange() {

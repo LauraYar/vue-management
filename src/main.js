@@ -44,7 +44,14 @@ import {
   Step,
   CheckboxGroup,
   Checkbox,
+  Upload,
 } from 'element-ui';
+// 导入富文本编辑器
+import VueQuillEditor from 'vue-quill-editor';
+// 导入富文本编辑器的样式
+import 'quill/dist/quill.core.css';
+import 'quill/dist/quill.snow.css';
+import 'quill/dist/quill.bubble.css';
 import axios from 'axios';
 // import vueConfig from 'vue.config';
 // 配置请求的根路径
@@ -55,7 +62,8 @@ axios.interceptors.request.use((config) => {
   return config;
 });
 Vue.prototype.$http = axios;
-
+// 将富文本编辑器注册为全局可用的组件
+Vue.use(VueQuillEditor);
 Vue.use(Button);
 Vue.use(Form);
 Vue.use(FormItem);
@@ -91,6 +99,7 @@ Vue.use(Steps);
 Vue.use(Step);
 Vue.use(CheckboxGroup);
 Vue.use(Checkbox);
+Vue.use(Upload);
 
 // Vue.use(Message);message需要进行全局挂载，跟其他不一样
 Vue.prototype.$message = Message;

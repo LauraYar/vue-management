@@ -290,8 +290,8 @@ export default {
       // console.log(res);
       // 把数据列表赋值给catelist
       this.cateList = res.data;
-      // console.log(this.cateList);
-      // console.log(this.cateProps);
+      console.log(this.cateList);
+      console.log(this.cateProps);
     },
     // 级联选择框选中项变化，（即点击选择到的数组）会触发这个函数.1.7.1参数列表
     handleChange() {
