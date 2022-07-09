@@ -63,6 +63,9 @@ axios.interceptors.request.use((config) => {
   config.headers.Authorization = window.sessionStorage.getItem('token');
   return config;
 });
+// 将两个对象合并成一个新对象，安装lodash
+import _ from 'lodash';
+Vue.prototype._ = _;
 Vue.prototype.$http = axios;
 // 将富文本编辑器注册为全局可用的组件
 Vue.use(VueQuillEditor);
