@@ -45,6 +45,8 @@ import {
   CheckboxGroup,
   Checkbox,
   Upload,
+  Timeline,
+  TimelineItem,
 } from 'element-ui';
 // 导入富文本编辑器
 import VueQuillEditor from 'vue-quill-editor';
@@ -100,6 +102,8 @@ Vue.use(Step);
 Vue.use(CheckboxGroup);
 Vue.use(Checkbox);
 Vue.use(Upload);
+Vue.use(Timeline);
+Vue.use(TimelineItem);
 
 // Vue.use(Message);message需要进行全局挂载，跟其他不一样
 Vue.prototype.$message = Message;
