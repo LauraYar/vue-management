@@ -55,12 +55,21 @@ import 'quill/dist/quill.core.css';
 import 'quill/dist/quill.snow.css';
 import 'quill/dist/quill.bubble.css';
 import axios from 'axios';
+import NProgress from 'nprogress'; // 引入nprogress插件
+import 'nprogress/nprogress.css'; // 这个nprogress样式必须引入
 // import vueConfig from 'vue.config';
 // 配置请求的根路径
 axios.defaults.baseURL = 'https://lianghj.top:8888/api/private/v1';
+// 在request拦截器中展示进度条 NProgress.start()
 axios.interceptors.request.use((config) => {
   // console.log(config);
+  NProgress.start(); // 设置加载进度条(开始..)
   config.headers.Authorization = window.sessionStorage.getItem('token');
+  return config;
+});
+// 在response拦截器中隐藏进度条 NProgress.done()
+axios.interceptors.request.use((config) => {
+  NProgress.done();
   return config;
 });
 // 将两个对象合并成一个新对象，安装lodash

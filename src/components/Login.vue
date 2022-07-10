@@ -74,6 +74,7 @@ export default {
         // 解构赋值1.2.1登录接口
 
         const { data: res } = await this.$http.post('login', this.loginForm);
+        console.log(res);
         if (res.meta.status !== 200) return this.$message.error('登录失败哦');
         this.$message.success('登录成功');
         // console.log(res);
